@@ -1,0 +1,38 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.synced_folder "../data", "/vagrant_data"
+  config.vm.host_name = "lrbdatagenerator"
+
+  # provisioning with `virtualbox`
+  config.vm.provider "virtualbox" do |provider, override|
+    override.vm.box = "ubuntu/trusty32"
+    provider.customize ["modifyvm", :id, "--memory", '1024']
+  end
+
+  # provisioning with `digital_ocean`
+  config.vm.provider :digital_ocean do |provider, override|
+    override.ssh.private_key_path = '~/.ssh/do'
+    override.vm.box = 'digital_ocean'
+    override.vm.box_url = 'https://github.com/smdahlen/vagrant-digitalocean/raw/master/box/digital_ocean.box'
+    override.puppet_install.puppet_version = "3.7.3"
+    provider.token= ""
+    provider.image = "14.04 x32"
+    provider.region = "lon1"
+    provider.size = "512mb"
+  end
+
+  #config.vm.provision "shell", inline:'apt-get update'
+  #config.vm.provision "shell", inline: 'apt-get --yes --force-yes install puppet'
+
+  # config the servers
+  config.vm.provision "puppet" do |puppet|
+    puppet.manifests_path = "manifests"
+    puppet.manifest_file  = "default.pp"
+    puppet.module_path = "~/.puppet/modules"
+  end
+
+end
