@@ -34,8 +34,29 @@ $ ssh-keygen -t rsa
 Enter file in which to save the key (/home/<username>/.ssh/id_rsa): do-office
 ```
 ..* The name of the file must match 'override.ssh.private_key_path' in Vagrantfile
-
-* Boot up the Vagrant environment.
+* Add an enviornment variable to store access token.
+```{r, engine='bash', count_lines}
+$ sudo gedit ~/.bashrc
+```
+..* Add the following line
+```
+export DIGITALOCEAN_TOK=******************* (paste the access token obtained from Digital Ocean)
+```
+* Provisioning with `Digital Ocean`. Modify the `Vagrantfile` in `/vagrant` folder if necessary.
+```ruby
+  config.vm.provider :digital_ocean do |provider, override|
+    override.ssh.private_key_path = './do-office'
+    override.vm.box = 'digital_ocean'
+    override.vm.box_url = 'https://github.com/smdahlen/vagrant-digitalocean/raw/master/box/digital_ocean.box'
+    override.puppet_install.puppet_version = "3.7.2"
+    provider.token= ENV['DIGITALOCEAN_TOK']
+    # Configurable parameters depending which droplet you want to create 
+    provider.image = "ubuntu-14-04-x64"
+    provider.region = "nyc1"
+    provider.size = "1gb"
+  end
+```
+* Boot up the environment.
 
 ```{r, engine='bash', count_lines}
 $ vagrant up
@@ -54,16 +75,18 @@ $ ./run mitsim.config
 
 ## How to config LRB?
 
-Modify the `mitsim.config` in the local `/vagrant/data` folder.
----
+* Modify the `mitsim.config` in the local `/vagrant/data` folder.
+```
 directoryforoutput=/opt/data
 databasename=hellolrb
 databaseusername=vagrant
 databasepassword=hellopwd
 numberofexpressways=0.5
----
+```
 
 ## Where is the result?
 
-In the provisioning VM's `data` directory. It matches the setting `directoryforoutput` in `mistsim.config`
+MITSIM output will be in the folder designated as `directoryforoutput` in `mistsim.config`.
+Three output file: `cardatapoints.out`, `historical-tolls.out`, `maxCarid.out`
+
 
