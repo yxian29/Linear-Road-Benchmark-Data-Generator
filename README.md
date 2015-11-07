@@ -4,18 +4,26 @@ This is an auto provisioning script to help set up the environment to run the `l
 
 ## Prerequisite
 
-### Install two puppet modules locally.
-
+1. Install [puppet](https://puppetlabs.com/).
+```{r, engine='bash', count_lines}
+$ sudo apt-get install puppet
 ```
-puppet module install puppetlabs-postgresql
-puppet module install meltwater-cpan
+2. Install `puppet modules`.
+
+```{r, engine='bash', count_lines}
+$ puppet module install puppetlabs-postgresql
+$ puppet module install meltwater-cpan
+```
+3. Install [vagrant](https://vagrantup.com).
+```{r, engine='bash', count_lines}
+$ sudo apt-get install vagrant
 ```
 
-### Install `vagrant plugin` locally
+4. Install `vagrant plugin`.
 
-```
-vagrant plugin install vagrant-digitalocean
-vagrant plugin install vagrant-puppet-install
+```{r, engine='bash', count_lines}
+$ vagrant plugin install vagrant-digitalocean
+$ vagrant plugin install vagrant-puppet-install
 ```
 
 ## How to run the simulation?
