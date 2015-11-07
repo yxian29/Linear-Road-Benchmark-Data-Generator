@@ -15,18 +15,18 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # provisioning with `digital_ocean`
   config.vm.provider :digital_ocean do |provider, override|
-    override.ssh.private_key_path = '~/.ssh/do-office'
+    override.ssh.private_key_path = './do-office'
     override.vm.box = 'digital_ocean'
     override.vm.box_url = 'https://github.com/smdahlen/vagrant-digitalocean/raw/master/box/digital_ocean.box'
-    override.puppet_install.puppet_version = :latest
-    provider.token= ""
-    provider.image = "ubuntu-14-10-x32"
-    provider.region = "lon1"
-    provider.size = "2gb"
+    override.puppet_install.puppet_version = "3.7.2"
+    provider.token= ENV['DIGITALOCEAN_TOK']
+    provider.image = "ubuntu-14-04-x64"
+    provider.region = "nyc1"
+    provider.size = "1gb"
   end
 
   #config.vm.provision "shell", inline:'apt-get update'
-  #config.vm.provision "shell", inline: 'apt-get --yes --force-yes install puppet'
+  #config.vm.provision "shell", inline:'apt-get --yes --force-yes install puppet'
 
   # config the servers
   config.vm.provision "puppet" do |puppet|

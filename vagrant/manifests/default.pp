@@ -26,7 +26,7 @@ exec { "/bin/echo \"%wheel  ALL=(ALL) ALL\" >> /etc/sudoers":
 
 class { 'postgresql::globals':
   manage_package_repo => true,
-  version             =>  '9.3',
+#  version             =>  '9.4.5',
 }->
 class { 'postgresql::server': }
 
